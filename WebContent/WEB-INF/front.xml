@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd">
+
+	<!-- HandlerMapping은 개발자가 명시하지 않아도 default로 1) BeanNameUrlHandlerMapping 
+		2) DefaultAnnotationHandlerMapping ViewResolver는 default가 IntegernalResourceViewResolver 
+		이지만, 접두어, 접미어는 개발자가 결정해야하므로 명시할 수 밖에 없다.... -->
+		
+	<!-- auto createing& autowired -->
+	<context:component-scan base-package="com.itbank" >
+		<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+	</context:component-scan>
+	
+	
+	<!-- 파일 업로드를 위한 bean 설정 -->
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+	</bean>
+		
+	<bean id="viewResolver"
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver"
+		p:prefix="/" 
+		p:suffix=".jsp" />
+		
+	<bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
+		<property name="messageConverters">
+			<list>
+				<bean class="org.springframework.http.converter.StringHttpMessageConverter">
+					<property name="supportedMediaTypes">
+						<value>text/html;charset=utf-8</value>
+					</property>
+				</bean>
+			</list>
+		</property>
+	</bean>
+		<!-- AOP -->
+		<bean id="soundEffect" 
+				  class="com.itbank.test.SoundEffect">
+		</bean>
+		
+<!-- 		<bean id="teenager" class="com.itbank.test.Teenager"></bean>
+		
+		<aop:config>
+			<aop:aspect ref="soundEffect" id="soundAspect">
+				<aop:pointcut expression="execution(public * com.itbank.test..*(..))" id="studentCut"/>
+				<aop:before method="bell" pointcut-ref="studentCut"/>
+			</aop:aspect>	
+		</aop:config> -->
+		
+		<!-- 
+			선언적 방법 : xml과 같은 외부 설정파일을 이용하는 방법은 상당히 보편적이고, 광범위한 패턴을 적용할 수 있으나 섬세한 제어가 불가능..
+			해결은 Annotation을 적용해보자 !!
+		 -->
+		 <aop:aspectj-autoproxy/>
+		 <bean id="loginCheck" class="com.itbank.common.auth.LoginCheck" />
+</beans>

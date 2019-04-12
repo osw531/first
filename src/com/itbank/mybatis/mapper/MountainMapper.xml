@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Mountain">
+	<insert id="insert" parameterType="Mountain">
+		insert into mountain(mountain_id,name,addr,detail,filename,lati,longi,marker)
+		values(seq_mountain.nextval,#{name},#{addr},#{detail},#{filename},#{lati},#{longi},#{marker})
+	</insert>
+</mapper>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<members>
+	<member>
+		<id>scott</id>
+		<name>스캇</name>
+		<sal>800</sal>	
+	</member>
+	<member>
+		<id>adams</id>
+		<name>아담스</name>
+		<sal>2400</sal>
+	</member>
+	<member>
+		<id>king</id>
+		<name>킹</name>
+		<sal>5000</sal>
+	</member>
+</members>
