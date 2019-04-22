@@ -33,7 +33,7 @@ public class JdbcAdminDAO implements AdminDAO{
 				public Admin mapRow(ResultSet rs, int rowNum) throws SQLException {
 					Admin admin = new Admin();
 					admin.setAdmin_id(rs.getInt("admin_id"));
-					admin.setId(rs.getString("id"));;
+					admin.setId(rs.getString("id"));
 					admin.setPass(rs.getString("pass"));
 					admin.setName(rs.getString("name"));
 					return admin;

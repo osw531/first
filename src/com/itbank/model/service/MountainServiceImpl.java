@@ -36,4 +36,26 @@ public class MountainServiceImpl implements MountainService{
 			throw new RegistFailException("등록 실패!!");
 		}
 	}
+
+	@Override
+	public List selectAll() {
+		return mountainDAO.selectAll();
+	}
+
+	@Override
+	public Mountain select(int mountain_id) {
+		return mountainDAO.select(mountain_id); //만약 그 1건이 null인 경우에 트라이문 처리 해줘야함
+	}
+
+	@Override
+	public void update(Mountain mountain) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void delete(int mountain_id) {
+		// TODO Auto-generated method stub
+		
+	}
 }

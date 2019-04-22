@@ -7,4 +7,16 @@
 		insert into mountain(mountain_id,name,addr,detail,filename,lati,longi,marker)
 		values(seq_mountain.nextval,#{name},#{addr},#{detail},#{filename},#{lati},#{longi},#{marker})
 	</insert>
+
+	<sql id="sql_select">
+		select mountain_id,name,addr,detail,filename,lati,longi,marker
+		from mountain
+	</sql>
+	<select id="selectAll" resultType="Mountain">
+		<include refid="sql_select"/> order by mountain_id asc		
+	</select>
+	
+	<select id="select" parameterType="int">
+		<include refid="sql_select"/> where mountain_id = #{mountain_id}
+	</select>
 </mapper>

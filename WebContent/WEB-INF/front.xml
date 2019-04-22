@@ -4,58 +4,87 @@
 	xmlns:p="http://www.springframework.org/schema/p"
 	xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:aop="http://www.springframework.org/schema/aop"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
 		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd">
 
 	<!-- HandlerMapping은 개발자가 명시하지 않아도 default로 1) BeanNameUrlHandlerMapping 
 		2) DefaultAnnotationHandlerMapping ViewResolver는 default가 IntegernalResourceViewResolver 
 		이지만, 접두어, 접미어는 개발자가 결정해야하므로 명시할 수 밖에 없다.... -->
-		
+
 	<!-- auto createing& autowired -->
-	<context:component-scan base-package="com.itbank" >
-		<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+	<context:component-scan
+		base-package="com.itbank">
+		<context:include-filter type="annotation"
+			expression="org.springframework.stereotype.Controller" />
 	</context:component-scan>
-	
-	
+
+
 	<!-- 파일 업로드를 위한 bean 설정 -->
-	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+	<bean id="multipartResolver"
+		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
 	</bean>
+
+	<!-- 스프링에서 지원하는 MVC 프레임웍 관련하여 여러 설정을 단축시킬 수 있는 태그, 즉 이 태그를 이용하면 개발자가 수 많은 
+		코드로 등록해야 하는 태그 수를 줄여준다.. 
+			<mvc:annotation-driven>의 효과 :
+				여러 설정을 함축해 놓은 것 뿐임 ( 원래 Default로 1번이랑 BeanURLHandlerMaaping이 있는데 이걸 선언해놓으면 1번만 Default로 됨 )
+					1) DefaultAnnotationHandlerMaaping
+						단, 이 핸들러 매핑만 등록된다. ( BeanNameURLHandlerMapping은 Default에서 제외된다. )
+					2) AnnotaionMethodHandlerAdapter 가 등록된다.
+						단, 한글변환 컨버터는 안되므로 내가 직접 추가해줘야한다.
+						->JSON 컨버터를 포함해서 총 7개 이상의 유용한 컨버터가 등록되어 있다
+						. 
+					==>즉 개발자가 설정해야할 사항을 알아서 해준다 !!!
+	-->
 		
+	
+	<mvc:annotation-driven>
+		<mvc:message-converters>
+			<bean
+				class="org.springframework.http.converter.StringHttpMessageConverter">
+				<property name="supportedMediaTypes">
+					<list>
+						<value>text/html;charset=utf-8</value>
+					</list>
+				</property>
+			</bean>
+		</mvc:message-converters>
+	</mvc:annotation-driven><!-- MVC가 지원하는 어노테이션을 이용하겠다!! -->
+
+	 <mvc:default-servlet-handler />
+	<!-- 톰캣 서버 web.xml에 이미 url_pattern을 /로 처리하고 있었는데 디스팻처에서 /로 요청을 뺏어왔으니까 원상복귀를 
+		시켜주어야 한다. 스프링 MVC에서 정적 자원 ( html, css, image 등등) 을 접근하려면 default-servlet-handler를 
+		명시 해주어야한다. 
+		 스프링의 DispatcherServlet이 URL을 낚아 챘기 때문에, 원래 html과 같은 정적 자원 처리를 담당했던 DefaultServlet의 역할을 정상화 시킴
+		 -> 요청에 정적 자원이 발견되면 DefaultServlet으로 포워딩 시킴
+		-->
+
+
 	<bean id="viewResolver"
 		class="org.springframework.web.servlet.view.InternalResourceViewResolver"
-		p:prefix="/" 
-		p:suffix=".jsp" />
-		
-	<bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
+		p:prefix="/" p:suffix=".jsp" />
+
+	<bean
+		class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
 		<property name="messageConverters">
 			<list>
-				<bean class="org.springframework.http.converter.StringHttpMessageConverter">
-					<property name="supportedMediaTypes">
-						<value>text/html;charset=utf-8</value>
-					</property>
-				</bean>
 			</list>
 		</property>
 	</bean>
-		<!-- AOP -->
-		<bean id="soundEffect" 
-				  class="com.itbank.test.SoundEffect">
-		</bean>
-		
-<!-- 		<bean id="teenager" class="com.itbank.test.Teenager"></bean>
-		
-		<aop:config>
-			<aop:aspect ref="soundEffect" id="soundAspect">
-				<aop:pointcut expression="execution(public * com.itbank.test..*(..))" id="studentCut"/>
-				<aop:before method="bell" pointcut-ref="studentCut"/>
-			</aop:aspect>	
-		</aop:config> -->
-		
-		<!-- 
-			선언적 방법 : xml과 같은 외부 설정파일을 이용하는 방법은 상당히 보편적이고, 광범위한 패턴을 적용할 수 있으나 섬세한 제어가 불가능..
-			해결은 Annotation을 적용해보자 !!
-		 -->
-		 <aop:aspectj-autoproxy/>
-		 <bean id="loginCheck" class="com.itbank.common.auth.LoginCheck" />
+	<!-- AOP -->
+	<bean id="soundEffect" class="com.itbank.test.SoundEffect">
+	</bean>
+
+	<!-- <bean id="teenager" class="com.itbank.test.Teenager"></bean> <aop:config> 
+		<aop:aspect ref="soundEffect" id="soundAspect"> <aop:pointcut expression="execution(public 
+		* com.itbank.test..*(..))" id="studentCut"/> <aop:before method="bell" pointcut-ref="studentCut"/> 
+		</aop:aspect> </aop:config> -->
+
+	<!-- 선언적 방법 : xml과 같은 외부 설정파일을 이용하는 방법은 상당히 보편적이고, 광범위한 패턴을 적용할 수 있으나 섬세한 
+		제어가 불가능.. 해결은 Annotation을 적용해보자 !! -->
+	<aop:aspectj-autoproxy />
+	<bean id="loginCheck" class="com.itbank.common.auth.LoginCheck" />
 </beans>

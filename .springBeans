@@ -11,6 +11,7 @@
 		<config>WebContent/WEB-INF/front.xml</config>
 		<config>WebContent/WEB-INF/sub.xml</config>
 		<config>WebContent/WEB-INF/test.xml</config>
+		<config>WebContent/WEB-INF/rest-context.xml</config>
 	</configs>
 	<autoconfigs>
 	</autoconfigs>

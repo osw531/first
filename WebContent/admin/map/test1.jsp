@@ -56,7 +56,7 @@ var infowindow = new google.maps.InfoWindow({
 	  //일정 시간뒤에 무언가 하고 싶을 때
 	  window.setTimeout(function() {map.setZoom(pos);},2400);
 	});
-
+	
 }
 </script>
 

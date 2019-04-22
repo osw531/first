@@ -53,20 +53,22 @@
 	</servlet-mapping>
 
 
-<!-- 웹 브라우저가 아닌 그 이외의 요청을 처리하는 servlet -->
-	<!-- 	<servlet>
-		<servlet-name>testServlet</servlet-name>
+	<!-- 
+		웹 브라우저가 아닌 그 이외의 요청을 처리하는 servlet( 기종에 상관없는, 즉 이기종간 데이터 교환을 가능하게 하는 웹 서비스로 지도 서비스를
+		제공해주자..그것도 RESTful하게 !!!! 
+	-->
+	<!-- Servlet Mapping -->
+ 	<servlet>
+		<servlet-name>restservlet</servlet-name>
 		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
 		<init-param>
-			<param-name>contextConfigLocation</param-name>
-			<param-value>
-	   		WEB-INF/test.xml
-   		</param-value>
+			<param-name>contextConfigLocation</param-name>정해져 있는거니까 바꾸면 안대
+			<param-value>WEB-INF/rest-context.xml</param-value>
 		</init-param>
 	</servlet>
 
 	<servlet-mapping>
-		<servlet-name>testServlet</servlet-name>
-		<url-pattern>/test/*</url-pattern>
-	</servlet-mapping> -->
+		<servlet-name>restservlet</servlet-name>
+		<url-pattern>/rest</url-pattern>
+	</servlet-mapping> 
 </web-app>

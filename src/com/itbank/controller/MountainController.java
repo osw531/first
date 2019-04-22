@@ -25,6 +25,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.itbank.common.exception.DataNotFoundException;
 import com.itbank.common.exception.RegistFailException;
+import com.itbank.common.file.FileManager;
 import com.itbank.model.domain.Mountain;
 import com.itbank.model.service.MountainService;
 
@@ -32,7 +33,8 @@ import com.itbank.model.service.MountainService;
 public class MountainController {
 	@Autowired
 	private MountainService mtService;
-	
+	@Autowired
+	private FileManager fileManager;
 	//관리자 모드의 산 정보 조회 요청 처리
 	@RequestMapping(value="/admin/mountain/list",method = RequestMethod.GET) //정석대로
 	@ResponseBody //jsp 반환하지 않기로 했자나 , 조심할쩜! 한글이 깨질수 있다!!어노테이션 핸들러 어댑터 등록해찌, 우린 이미 해놈
@@ -61,9 +63,8 @@ public class MountainController {
 		MultipartFile myFile = mountain.getMyFile();
 		String filename = myFile.getOriginalFilename();
 		System.out.println("파일명은"+ filename);
-		
-		
-		/*
+			
+		/* 고전적인방법
 		 * InputStream fis = null; //파일이 아니라 메모리에 떠잇는걸 읽어드링ㄹ거니까 Fis가 아닌 is
 		 * FileOutputStream fos = null; try { fis = myFile.getInputStream(); //request가
 		 * context정보를 알고있으니 request도 받아야해 String realPath =
@@ -75,9 +76,21 @@ public class MountainController {
 		 * catch block e.printStackTrace(); } catch (IOException e) { // TODO
 		 * Auto-generated catch block e.printStackTrace(); }
 		 */
-		try {
-			String realPath = request.getServletContext().getRealPath("/data");
+		String realPath = request.getServletContext().getRealPath("/data");
+		System.out.println(realPath);
+		File uploadFile = null;
+		try {	
+			uploadFile = new File(realPath+"/"+filename);
+			String ext =  fileManager.getExt(filename);
+			//업로드
 			myFile.transferTo(new File(realPath+"/"+filename));
+			
+			//업로드가 완료된 시점에 파일을 전송해야하니까..파일명 교체!!
+			filename = fileManager.reNameByDate(uploadFile,realPath);
+			if(filename != null) {
+				mountain.setFilename(filename);
+				mtService.insert(mountain);
+			}
 		} catch (IllegalStateException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -86,18 +99,16 @@ public class MountainController {
 			e.printStackTrace();
 		}
 		
-		mountain.setFilename("2019.jpg");
-		mtService.insert(mountain);
 		return "redirect:/admin/mountain/mtlist";
 	}
 	@RequestMapping(value="/admin/mountain/mtlist",method=RequestMethod.GET)
 	public ModelAndView selectAll() {
 		ModelAndView mav = new ModelAndView("admin/map/list");
+		List mtList = mtService.selectAll();
+		mav.addObject("mtList",mtList);
+		System.out.println("mtList는"+mtList.size());
 		return mav;
 	}
-	
-	
-	
 	@ExceptionHandler(DataNotFoundException.class)
 	@ResponseBody
 	public String getListFail() {

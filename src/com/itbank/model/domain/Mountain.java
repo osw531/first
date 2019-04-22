@@ -9,9 +9,9 @@ public class Mountain {
 	private String detail;
 	private String filename; // jsp에서 file은 string형이 아니라 바로 안들어가진다..원래 이름이 같으면 자동으로 들어가짐
 	// 스프링에서 파일 처리자를 등록!! 자동으로 파일을 담아주는 녀석이 있따
-	private MultipartFile myFile;
-	private long lati;
-	private long longi;
+	private MultipartFile myFile; //사진 여러개 넣을꺼면 이걸 배열로 줘봐
+	private double lati;
+	private double longi;
 	private String marker;
 
 	public int getMountain_id() {
@@ -62,19 +62,19 @@ public class Mountain {
 		this.myFile = myFile;
 	}
 
-	public long getLati() {
+	public double getLati() {
 		return lati;
 	}
 
-	public void setLati(long lati) {
+	public void setLati(double lati) {
 		this.lati = lati;
 	}
 
-	public long getLongi() {
+	public double getLongi() {
 		return longi;
 	}
 
-	public void setLongi(long longi) {
+	public void setLongi(double longi) {
 		this.longi = longi;
 	}
 
@@ -85,4 +85,5 @@ public class Mountain {
 	public void setMarker(String marker) {
 		this.marker = marker;
 	}
+
 }

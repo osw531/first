@@ -15,14 +15,12 @@ public class MybatisMountainDAO implements MountainDAO{
 	
 	@Override
 	public List selectAll() {
-		// TODO Auto-generated method stub
-		return null;
+		return sessionTemplate.selectList("Mountain.selectAll");
 	}
 
 	@Override
 	public Mountain select(int mountain_id) {
-		// TODO Auto-generated method stub
-		return null;
+		return sessionTemplate.selectOne("Mountain.select",mountain_id);
 	}
 
 	@Override

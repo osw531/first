@@ -1,4 +1,9 @@
+<%@page import="java.util.List"%>
+<%@page import="com.itbank.model.domain.Mountain"%>
 <%@ page contentType="text/html; charset=UTF-8"%>
+<%
+	List<Mountain> mtList = (List)request.getAttribute("mtList");
+%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -25,25 +30,25 @@ tr:nth-child(even) {
 <body>
 <table>
   <tr>
-    <th>First Name</th>
-    <th>Last Name</th>
-    <th>Points</th>
+    <th>NO</th>
+    <th>이미지</th>
+    <th>산 이름</th>
+    <th>주소</th>
+    <th>위도</th>
+    <th>경도</th>
+    <th>사용 마커</th>
   </tr>
+  <%for(int i=0;i<mtList.size();i++){%>
+  <%Mountain mt = mtList.get(i); %>
   <tr>
-    <td>Jill</td>
-    <td>Smith</td>
-    <td>50</td>
+  	<td><img src="/data/<%=mt.getFilename()%>" width="70px"></td>
+    <td><%=mt.getName() %></td>
+    <td><%=mt.getAddr() %></td>
+    <td><%=mt.getLati() %></td>
+    <td><%=mt.getLongi() %></td>
+    <td><img src="/images/marker/<%=mt.getMarker()%>"></td>
   </tr>
-  <tr>
-    <td>Eve</td>
-    <td>Jackson</td>
-    <td>94</td>
-  </tr>
-  <tr>
-    <td>Adam</td>
-    <td>Johnson</td>
-    <td>67</td>
-  </tr>
+  <%}%>
 </table>
 </body>
 </html>

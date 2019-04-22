@@ -107,7 +107,7 @@ function regist(){
 	<h3>Contact Form</h3>
 
 	<div class="container">
-		<form>
+		<form enctype="multipart/form-data">
 			<input type="text" 	     name="name" placeholder="산 이름" style="width: 85%">
 			<input type="button" 	 value="공공데이터 검색" /> 
 			<input type="text"	 	 name="addr" placeholder="주소">

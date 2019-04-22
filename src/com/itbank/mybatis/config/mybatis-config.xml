@@ -9,6 +9,6 @@
 </typeAliases> 
   <mappers>
     <mapper resource="com/itbank/mybatis/mapper/MemberMapper.xml"/>
-    <mapper resource="com/itbank/mybatis/mapper/MountainMapper.xml"/> 
+    <mapper resource="com/itbank/mybatis/mapper/MountainMapper.xml"/>
   </mappers>
 </configuration>
